@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Passport Information</title>
+	<style>
+		table {
+			border-collapse: collapse;
+			width: 50%;
+			color: #333;
+			font-family: 'Roboto', sans-serif;
+			font-size: 14px;
+			text-align: left;
+
+            
+		}
+		th {
+			background-color: #f2f2f2;
+			color: #333;
+			font-weight: bold;
+			padding: 8px;
+			text-align: center;
+			border-bottom: 1px solid #ddd;
+		}
+		td {
+			padding: 8px;
+			border-bottom: 1px solid #ddd;
+            font-weight: bold;
+            background-color: #f2f2f2;
+		}
+		img {
+			display: block;
+			border-radius: 10%;
+			margin-right: auto;
+			width: 20%;
+            height: 20%;
+		}
+        
+	</style>
+</head>
+<body onload="initialize()">
+	<h1>Passport Information</h1>
+	
+	<table>
+        <tr>
+			<th>Photo</th>
+			<td><img src="profile2.jpeg" alt="Passport Picture"></td>
+		</tr>
+		<tr>
+			<th>Name</th>
+			<td>Mercy Ndiritu</td>
+		</tr>
+		<tr>
+			<th>Registration Number</th>
+			<td>SCT221-0474/2022</td>
+		</tr>
+	</table>
+<script>
+    const localStorage = window.localStorage;
+ const initialize = () => {
+    if (localStorage) {
+    const count = localStorage.getItem("visitCount") || 0;
+    const newCount = parseInt(count) + 1;
+    localStorage.setItem("visitCount", newCount);
+    }
+    updateDOM();
+ };
+ const updateDOM = () => {
+    const count = localStorage.getItem("visitCount") || 0;
+    const storedPreferences = localStorage.getItem("preference");
+    const preference = storedPreferences? JSON.parse(storedPreferences): {};
+    document.getElementById(
+    "visitCount"
+    ).innerHTML = `Visit count ${count}`;
+    document.body.style.background = preference.color || "white";
+    showAllStoredKeyValues();
+};
+ const setColorPreference = color => {
+    const preference = { color }
+    localStorage.setItem("preference", JSON.stringify(preference));
+    updateDOM();
+    
+};
+
+const clearAll = () => {
+    localStorage.clear();
+    updateDOM();
+};
+
+const removeCount = () => {
+localStorage.removeItem("visitCount");
+updateDOM();
+};
+
+const showAllStoredKeyValues = () => {
+    console.log(`we have ${localStorage.length} values`);
+    const ul = document.getElementById("storedItems");
+    ul.innerHTML = "";
+    for (let index = 0; index < localStorage.length; index++) {
+        const key = localStorage.key(index);
+        var li = document.createElement("li");
+        li.appendChild(
+        document.createTextNode(`${key} = ${localStorage.getItem(key)}`)
+    );
+    ul.appendChild(li);
+}
+};
+ 
+ </script>
+ </head>
+ 
+    <ul id="storedItems"></ul>
+    <button type="button" onclick="setColorPreference('red')">Red</button>
+    <button type="button"onclick="setColorPreference('green')">Green</button>
+    <button type="button" onclick="setColorPreference('blue')">Blue</button>
+    <div id="visitCount"></div>
+    <button type="button" onclick="removeCount()">Remove count</button>
+    <button type="button" onclick="clearAll()">Clear all</button>
+</body>
+</html>
